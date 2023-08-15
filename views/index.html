@@ -1,0 +1,37 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Nicoles URL Shortener Microservice</title>
+    <link href="/public/style.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <h1>Nicole's URL Shortener Microservice</h1>
+    <main>
+      <section>
+        <form action="api/shorturl" method="POST">
+          <fieldset>
+            <legend>URL Shortener</legend>
+            <label for="url_input">URL:</label>
+            <input
+              id="url_input"
+              type="text"
+              name="url"
+              placeholder="https://www.freecodecamp.org/"
+            />
+            <input type="submit" value="POST URL" />
+          </fieldset>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <p>
+        Built by
+        <a href="https://nicolelancasterportfolio.netlify.app/"
+          >Nicole Lancaster</a
+        >
+      </p>
+    </footer>
+  </body>
+</html>
