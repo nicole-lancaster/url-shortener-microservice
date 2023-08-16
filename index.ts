@@ -1,5 +1,4 @@
-import express from "express";
-export const app = express();
+import { app } from "./src/app";
 import { AddressInfo } from "net";
 
 const listener = app.listen(process.env.PORT || 3000, () => {
