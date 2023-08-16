@@ -1,7 +1,18 @@
 import express from "express";
 import cors from "cors";
-import { getBasicHtml } from "./app.controllers";
+import {
+  getBasicHtml,
+  getOriginalByInputtingShort,
+  postOriginalAndGetShort,
+} from "./app.controllers";
 export const app = express();
 
 app.use(cors({ optionsSuccessStatus: 200 }));
-app.get("/api", getBasicHtml);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.get("/", getBasicHtml);
+app.post("/api/shorturl", postOriginalAndGetShort);
+app.get("/api/shorturl/:shorturl", getOriginalByInputtingShort);
+app.get("*", (_, response) =>
+  response.status(404).send({ error: "Not found" }),
+);
