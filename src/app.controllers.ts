@@ -1,11 +1,8 @@
 import Express, { response } from "express";
 import { createAndSaveUrl } from "./db/database";
 
-type OriginalURL = string;
-type ShortURLId = string;
-
 export const getBasicHtml = (
-  request: Express.Request,
+  _request: Express.Request,
   response: Express.Response,
 ) => {
   try {
@@ -19,17 +16,14 @@ export const requestStorageOfUrl = async (
   request: Express.Request,
   response: Express.Response,
 ) => {
-  // 1. get url from request.body
   const original_url: string = request.body.url;
   const validUrl =
     /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/g;
   try {
-    // 2. generate short url using the length of keys of the in memory database
     if (original_url.match(validUrl)) {
-      const savedUrlInDb = createAndSaveUrl(original_url);
-      await savedUrlInDb;
+      const savedUrlInDb = await createAndSaveUrl(original_url);
       console.log(savedUrlInDb);
-      // 4. respond with json with both original and short url
+
       return response.status(201).send(savedUrlInDb);
     } else {
       return response.status(400).send({ error: "invalid url" });
