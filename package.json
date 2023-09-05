@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier -w .",
     "start": "ts-node",
-    "dev": "nodemon --delay 500ms index.ts"
+    "dev": "nodemon index.ts"
   },
   "keywords": [],
   "author": "Nicole Lancaster",
