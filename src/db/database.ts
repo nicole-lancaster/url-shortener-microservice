@@ -31,10 +31,8 @@ export const createAndSaveUrl = async (original_url: string) => {
   console.log("DB connection successful!");
   // the Url() constructor returns in instance of HydratedDocument<Url>
   // Url is a document interface, representing the raw obj structure that Url objects look like
-  const url: HydratedDocument<Url> = new Url(
-    { _id: 2 },
-    { short_url: 2, original_url },
-  );
+  let url: HydratedDocument<Url> = new Url({ short_url: 2, original_url });
+
   const savedUrl = await url.save();
   return savedUrl;
 };
