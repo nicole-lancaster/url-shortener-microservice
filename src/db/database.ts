@@ -22,17 +22,37 @@ const urlSchema = new mongoose.Schema<Url>(
   { versionKey: false },
 );
 
-// Create a model - this allows you to create instances of your objects, called documents
+// 3. Create a model - this allows you to create instances of your objects, called documents
 const Url = model<Url>("Url", urlSchema);
 
-export const createAndSaveUrl = async (original_url: string) => {
-  // connecting to mongoose database
-  await connect((process.env as EnvVariables).MONGO_URI);
-  console.log("DB connection successful!");
-  // the Url() constructor returns in instance of HydratedDocument<Url>
-  // Url is a document interface, representing the raw obj structure that Url objects look like
-  let url: HydratedDocument<Url> = new Url({ short_url: 2, original_url });
+// 4. Connect to mongoose database
+connect((process.env as EnvVariables).MONGO_URI);
 
-  const savedUrl = await url.save();
-  return savedUrl;
+// 5. Checking if inputted original url is already in DB
+export const findOrCreateByOriginalUrl = async (original_url: string) => {
+  // 6. if it is, return that one already saved to the user
+  const foundUrl = await Url.findOne({ original_url }, { _id: 0 });
+
+  try {
+    if (foundUrl) {
+      console.log(`url already in DB`);
+      return foundUrl;
+    }
+    // 7. otherwise creating a new instance of a url and saving to DB
+    else {
+      console.log("Not found");
+      const numOfUniqueOriginalUrls: number = await Url.count();
+      console.log("number of models: ", numOfUniqueOriginalUrls);
+      // the Url() constructor returns in instance of HydratedDocument<Url>
+      // Url is a document interface, representing the raw obj structure that Url objects look like
+      let url: HydratedDocument<Url> = new Url({
+        short_url: numOfUniqueOriginalUrls + 1,
+        original_url,
+      });
+      const savedUrl = await url.save();
+      return savedUrl;
+    }
+  } catch (err) {
+    return err;
+  }
 };

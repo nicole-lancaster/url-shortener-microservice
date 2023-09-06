@@ -1,5 +1,5 @@
 import Express, { response } from "express";
-import { createAndSaveUrl } from "./db/database";
+import { findOrCreateByOriginalUrl } from "./db/database";
 
 export const getBasicHtml = (
   _request: Express.Request,
@@ -21,15 +21,15 @@ export const requestStorageOfUrl = async (
     /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/g;
   try {
     if (original_url.match(validUrl)) {
-      const savedUrlInDb = await createAndSaveUrl(original_url);
-      console.log(savedUrlInDb);
+      const savedUrlInDb = await findOrCreateByOriginalUrl(original_url);
+      // console.log(savedUrlInDb);
 
       return response.status(201).send(savedUrlInDb);
     } else {
       return response.status(400).send({ error: "invalid url" });
     }
   } catch (err) {
-    console.error(err);
+    console.error("error message", err);
     return response.status(500).send({ errorMsg: "something went wrong" });
   }
 };
