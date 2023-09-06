@@ -1,4 +1,5 @@
 require("dotenv").config();
+import { response } from "express";
 import mongoose, { HydratedDocument, connect, model } from "mongoose";
 
 // defining the type (shape) of the env variables
@@ -31,12 +32,12 @@ connect((process.env as EnvVariables).MONGO_URI);
 // 5. Checking if inputted original url is already in DB
 export const findOrCreateByOriginalUrl = async (original_url: string) => {
   // 6. if it is, return that one already saved to the user
-  const foundUrl = await Url.findOne({ original_url }, { _id: 0 });
+  const foundOriginalUrl = await Url.findOne({ original_url }, { _id: 0 });
 
   try {
-    if (foundUrl) {
+    if (foundOriginalUrl) {
       console.log(`url already in DB`);
-      return foundUrl;
+      return foundOriginalUrl;
     }
     // 7. otherwise creating a new instance of a url and saving to DB
     else {
@@ -54,5 +55,22 @@ export const findOrCreateByOriginalUrl = async (original_url: string) => {
     }
   } catch (err) {
     return err;
+  }
+};
+
+export const findOneByShortUrl = async (short_url: string) => {
+  const foundUrlByShort = await Url.findOne({ short_url }, { _id: 0 });
+
+  try {
+    if (foundUrlByShort) {
+      console.log(`url already in DB`);
+      console.log(foundUrlByShort);
+      return foundUrlByShort;
+    } else {
+      console.log("in the else block");
+      return 1;
+    }
+  } catch (err) {
+    return response.status(500).send({ msg: "in the catch block" });
   }
 };
