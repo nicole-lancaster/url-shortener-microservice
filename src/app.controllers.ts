@@ -1,4 +1,4 @@
-import Express, { response } from "express";
+import Express from "express";
 import { findOneByShortUrl, findOrCreateByOriginalUrl } from "./db/database";
 
 export const getBasicHtml = (
@@ -23,13 +23,11 @@ export const requestSaveToDbByOriginalUrl = async (
   try {
     if (originalUrl.match(validUrl)) {
       const savedUrlInDb = await findOrCreateByOriginalUrl(originalUrl);
-      // console.log(savedUrlInDb);
       return response.status(201).send(savedUrlInDb);
     } else {
       return response.status(400).send({ error: "invalid url" });
     }
   } catch (err) {
-    console.error("error message", err);
     return response.status(500).send({ errorMsg: "something went wrong" });
   }
 };
@@ -40,12 +38,9 @@ export const directToOriginalUrlFromShort = async (
 ) => {
   try {
     const shortUrl: string = request.params.shorturl;
-    // const parsedShortUrlId: number = parseInt(shortUrl);
     const foundByShortUrl = await findOneByShortUrl(shortUrl);
-    return foundByShortUrl;
-    // console.log(foundByShortUrl)
+    return response.redirect(`${foundByShortUrl}`);
   } catch (err) {
-    console.error(err);
     return response.status(500).send({ errorMsg: "something went wrong" });
   }
 };

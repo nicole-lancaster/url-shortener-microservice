@@ -35,22 +35,19 @@ export const findOrCreateByOriginalUrl = async (original_url: string) => {
   const foundOriginalUrl = await Url.findOne({ original_url }, { _id: 0 });
 
   try {
+    let savedUrl;
     if (foundOriginalUrl) {
-      console.log(`url already in DB`);
-      return foundOriginalUrl;
+      savedUrl = await foundOriginalUrl.save();
+      return savedUrl;
     }
     // 7. otherwise creating a new instance of a url and saving to DB
     else {
-      console.log("Not found");
       const numOfUniqueOriginalUrls: number = await Url.count();
-      console.log("number of models: ", numOfUniqueOriginalUrls);
-      // the Url() constructor returns in instance of HydratedDocument<Url>
-      // Url is a document interface, representing the raw obj structure that Url objects look like
       let url: HydratedDocument<Url> = new Url({
         short_url: numOfUniqueOriginalUrls + 1,
         original_url,
       });
-      const savedUrl = await url.save();
+      savedUrl = await url.save();
       return savedUrl;
     }
   } catch (err) {
@@ -58,17 +55,13 @@ export const findOrCreateByOriginalUrl = async (original_url: string) => {
   }
 };
 
-export const findOneByShortUrl = async (short_url: string) => {
+export const findOneByShortUrl = async (short_url: string | null) => {
   const foundUrlByShort = await Url.findOne({ short_url }, { _id: 0 });
-
   try {
     if (foundUrlByShort) {
-      console.log(`url already in DB`);
-      console.log(foundUrlByShort);
-      return foundUrlByShort;
+      return foundUrlByShort.original_url;
     } else {
-      console.log("in the else block");
-      return 1;
+      return;
     }
   } catch (err) {
     return response.status(500).send({ msg: "in the catch block" });

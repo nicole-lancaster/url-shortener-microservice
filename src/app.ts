@@ -3,7 +3,6 @@ import cors from "cors";
 import {
   directToOriginalUrlFromShort,
   getBasicHtml,
-  // getOriginalByInputtingShort,
   requestSaveToDbByOriginalUrl,
 } from "./app.controllers";
 export const app = express();
@@ -14,6 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/api", getBasicHtml);
 app.post("/api/shorturl", requestSaveToDbByOriginalUrl);
 app.get("/api/shorturl/:shorturl", directToOriginalUrlFromShort);
-app.get("*", (_, response) =>
+app.get("*", (request, response) =>
   response.status(404).send({ error: "Not found" }),
 );
