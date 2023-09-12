@@ -1,12 +1,8 @@
-import Express, { response } from "express";
-
-type OriginalURL = string;
-type ShortURLId = string;
-
-const inMemoryDatabase: Record<ShortURLId, OriginalURL> = {};
+import Express from "express";
+import { findOneByShortUrl, findOrCreateByOriginalUrl } from "./db/database";
 
 export const getBasicHtml = (
-  request: Express.Request,
+  _request: Express.Request,
   response: Express.Response,
 ) => {
   try {
@@ -16,55 +12,35 @@ export const getBasicHtml = (
   }
 };
 
-export const postOriginalAndGetShort = (
+export const requestSaveToDbByOriginalUrl = async (
   request: Express.Request,
   response: Express.Response,
 ) => {
-  try {
-    // 1. get url from request.body
-    const original_url: string = request.body.url;
-    const validUrl =
-      /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/g;
-    // 2. generate short url using the length of keys of the in memory database
-    const numOfStoredShortUrls: number = Object.keys(inMemoryDatabase).length;
-    const short_url: number = numOfStoredShortUrls + 1;
+  const originalUrl: string = request.body.url;
+  const validUrl =
+    /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/g;
 
-    if (original_url.match(validUrl)) {
-      // 3. store short url and original url in the inMemoryDatabase
-      inMemoryDatabase[short_url] = original_url;
-      // 4. respond with json with both original and short url
-      return response.status(201).send({ original_url, short_url });
+  try {
+    if (originalUrl.match(validUrl)) {
+      const savedUrlInDb = await findOrCreateByOriginalUrl(originalUrl);
+      return response.status(201).send(savedUrlInDb);
     } else {
       return response.status(400).send({ error: "invalid url" });
     }
   } catch (err) {
-    console.error(err);
     return response.status(500).send({ errorMsg: "something went wrong" });
   }
 };
 
-export const getOriginalByInputtingShort = (
+export const directToOriginalUrlFromShort = async (
   request: Express.Request,
   response: Express.Response,
 ) => {
   try {
     const shortUrl: string = request.params.shorturl;
-    const originalUrl: string | undefined = inMemoryDatabase[shortUrl];
-    const parsedShortUrlId: number = parseInt(shortUrl);
-
-    if (isNaN(parsedShortUrlId)) {
-      return response
-        .status(400)
-        .send({ error: "please enter valid short URL ID (number)" });
-    } else if (typeof originalUrl === "undefined") {
-      return response
-        .status(404)
-        .send({ error: `short url ${shortUrl} not found` });
-    } else {
-      return response.redirect(originalUrl);
-    }
+    const foundByShortUrl = await findOneByShortUrl(shortUrl);
+    return response.redirect(`${foundByShortUrl}`);
   } catch (err) {
-    console.error(err);
     return response.status(500).send({ errorMsg: "something went wrong" });
   }
 };
