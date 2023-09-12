@@ -1,0 +1,35 @@
+body {
+  font-family: "monospace", sans-serif;
+  color: #222;
+  background-color: #fafafa;
+  text-align: center;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+form {
+  padding: 30px;
+  font-size: 1.2rem;
+}
+
+legend,
+label,
+input {
+  padding: 5px;
+  margin: 5px;
+}
+
+input {
+  border: 1.5px solid #222;
+  border-radius: 20px;
+}
+
+#input_url {
+  text-align: center;
+}
+
+a {
+  color: #2574a9;
+}
