@@ -1,5 +1,6 @@
 import Express from "express";
 import { findOneByShortUrl, findOrCreateByOriginalUrl } from "./db/database";
+import validUrl from 'valid-url';
 
 export const getBasicHtml = (
   _request: Express.Request,
@@ -17,15 +18,14 @@ export const requestSaveToDbByOriginalUrl = async (
   response: Express.Response,
 ) => {
   const originalUrl: string = request.body.url;
-  const validUrl =
-    /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/g;
 
   try {
-    if (originalUrl.match(validUrl)) {
+    if (validUrl.isUri(originalUrl)) {
       const savedUrlInDb = await findOrCreateByOriginalUrl(originalUrl);
       return response.status(201).send(savedUrlInDb);
-    } else {
-      return response.status(400).send({ error: "invalid url" });
+    }
+    else {
+      return response.json({ error: "invalid url" });
     }
   } catch (err) {
     return response.status(500).send({ errorMsg: "something went wrong" });
