@@ -47,8 +47,12 @@ export const findOrCreateByOriginalUrl = async (original_url: string) => {
         short_url: numOfUniqueOriginalUrls + 1,
         original_url,
       });
-      savedUrl = await url.save();
-      return savedUrl;
+      const savedUrl = await url.save();
+      const foundNewlySavedUrl = await Url.findOne(
+        { original_url },
+        { _id: 0 },
+      );
+      return foundNewlySavedUrl;
     }
   } catch (err) {
     return err;

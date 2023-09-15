@@ -1,6 +1,6 @@
 import Express from "express";
 import { findOneByShortUrl, findOrCreateByOriginalUrl } from "./db/database";
-import validUrl from 'valid-url';
+import validUrl from "valid-url";
 
 export const getBasicHtml = (
   _request: Express.Request,
@@ -23,8 +23,7 @@ export const requestSaveToDbByOriginalUrl = async (
     if (validUrl.isUri(originalUrl)) {
       const savedUrlInDb = await findOrCreateByOriginalUrl(originalUrl);
       return response.status(201).send(savedUrlInDb);
-    }
-    else {
+    } else {
       return response.json({ error: "invalid url" });
     }
   } catch (err) {
