@@ -3,7 +3,7 @@
 
 # URL Shortener Microservice
 
-A simple microservice to parse request headers, live version is hosted on replit here: https://url-shortener-microservice-1.nicole-lancaste.repl.co/
+A simple microservice to shorten any valid URL. 
 
 ## Description
 
@@ -11,6 +11,11 @@ This is a microservice project built as part of the freeCodeCamp backend and API
 
 freeCodeCamp give you a boilerplate project template that you can clone here: https://github.com/freeCodeCamp/boilerplate-project-urlshortener/
 however, I chose to build my own project from scratch including the server.
+
+1. Submit a URl of your choice - for the URL to be valid it must be in the format http:// or http://
+2. You will then see a response object that shows a generated short URL, unique to the submitted URL.
+3. You can then immediately put the provided short URL number into the broswer: /shorturl/<enter your short url here>
+4. Et voila! Your will be redirected to the original URl you submitted
 
 ## Tech Stack/Tools
 
