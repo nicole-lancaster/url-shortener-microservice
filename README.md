@@ -24,5 +24,6 @@ however, I chose to build my own project from scratch including the server.
 ### Author
 Nicole Lancaster
 
-### Feedback
-Any feedback on ways I could iprove any aspect/(s) of my code would be appreciated immensely.
+### Feedback/suggestions 🫶
+
+First of all, if you read any of my code, thank you! I would be extremly grateful for any feedback on ways to improve. Please just reach out to me on LinkedIn, raise a pull request, or submit an issue!
