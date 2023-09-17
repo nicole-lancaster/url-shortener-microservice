@@ -20,14 +20,14 @@ export const requestSaveToDbByOriginalUrl = async (
   const originalUrl: string = request.body.url;
 
   try {
-    if (validUrl.isUri(originalUrl)) {
+    if (validUrl.isUri(originalUrl) && originalUrl.startsWith("http")) {
       const savedUrlInDb = await findOrCreateByOriginalUrl(originalUrl);
       return response.status(201).send(savedUrlInDb);
     } else {
       return response.json({ error: "invalid url" });
     }
   } catch (err) {
-    return response.status(500).send({ errorMsg: "something went wrong" });
+    return response.status(500).json({ error: "something went wrong" });
   }
 };
 
@@ -40,6 +40,6 @@ export const directToOriginalUrlFromShort = async (
     const foundByShortUrl = await findOneByShortUrl(shortUrl);
     return response.redirect(`${foundByShortUrl}`);
   } catch (err) {
-    return response.status(500).send({ errorMsg: "something went wrong" });
+    return response.status(500).json({ error: "unable to redirect" });
   }
 };
