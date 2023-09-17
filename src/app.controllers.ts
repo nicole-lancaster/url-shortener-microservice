@@ -9,7 +9,7 @@ export const getBasicHtml = (
   try {
     return response.status(200).sendFile(`${__dirname}/views/index.html`);
   } catch (err) {
-    return console.error(err);
+    return response.status(500).json({ error: "unable to fetch static files" });
   }
 };
 
@@ -18,7 +18,6 @@ export const requestSaveToDbByOriginalUrl = async (
   response: Express.Response,
 ) => {
   const originalUrl: string = request.body.url;
-
   try {
     if (validUrl.isUri(originalUrl) && originalUrl.startsWith("http")) {
       const savedUrlInDb = await findOrCreateByOriginalUrl(originalUrl);
@@ -35,8 +34,8 @@ export const directToOriginalUrlFromShort = async (
   request: Express.Request,
   response: Express.Response,
 ) => {
+  const shortUrl: string = request.params.shorturl;
   try {
-    const shortUrl: string = request.params.shorturl;
     const foundByShortUrl = await findOneByShortUrl(shortUrl);
     return response.redirect(`${foundByShortUrl}`);
   } catch (err) {
