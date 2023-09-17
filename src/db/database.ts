@@ -68,6 +68,6 @@ export const findOneByShortUrl = async (short_url: string | null) => {
       return;
     }
   } catch (err) {
-    return response.status(500).send({ msg: "in the catch block" });
+    return response.status(500).send({ error: "something went wrong" });
   }
 };
