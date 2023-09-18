@@ -55,7 +55,7 @@ export const findOrCreateByOriginalUrl = async (original_url: string) => {
       return foundNewlySavedUrl;
     }
   } catch (err) {
-    return err;
+    return response.status(500).send({ error: "something went wrong" });
   }
 };
 
@@ -69,7 +69,7 @@ export const findOneByShortUrl = async (short_url: string | null) => {
     }
     // 11. otherwise, user requested a short url that is invalid
     else {
-      return response.json({ error: "invalid url" });
+      return response.status(400).json({ error: "invalid url" });
     }
   } catch (err) {
     return response.status(500).send({ error: "something went wrong" });

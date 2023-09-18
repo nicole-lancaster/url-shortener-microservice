@@ -14,7 +14,6 @@
     <main>
       <section>
         <form action="api/shorturl" method="POST">
-          <!-- <fieldset> -->
           <legend>URL Shortener</legend>
           <label for="url_input">URL:</label>
           <input
@@ -24,16 +23,24 @@
             placeholder="https://www.google.com"
           />
           <input type="submit" value="POST URL" />
-          <!-- </fieldset> -->
         </form>
+      </section>
+      <section id="instructions-container">
+        <ol id="instructions">
+          <li>Submit a URL that you want to be shortened</li>
+          <li>Recieve a JSON response providing you with the shortened URL</li>
+          <li>
+            Enter the short URL in your address bar in the browser after<br /><br />
+            .../shorturl/<strong>&lt;your-short-url-here&gt;</strong>
+          </li>
+          <li>Be redirected to your chosen URL 🎉</li>
+        </ol>
       </section>
     </main>
     <footer>
       <p>
-        Built by
-        <a href="https://nicolelancasterportfolio.netlify.app/"
-          >Nicole Lancaster</a
-        >
+        👩‍💻 Built by
+        <a href="https://linktr.ee/nicolelancaster">Nicole Lancaster</a>
       </p>
     </footer>
   </body>

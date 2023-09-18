@@ -11,9 +11,10 @@ app.use(cors({ optionsSuccessStatus: 200 }));
 app.use("/public", express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.get("/api", getBasicHtml);
 app.post("/api/shorturl", requestSaveToDbByOriginalUrl);
 app.get("/api/shorturl/:shorturl", directToOriginalUrlFromShort);
-app.get("*", (request, response) =>
+app.get("*", (_, response) =>
   response.status(404).send({ error: "Not found" }),
 );
